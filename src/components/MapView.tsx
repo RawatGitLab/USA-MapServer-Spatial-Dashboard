@@ -14,7 +14,9 @@ import {
   X,
   Compass,
   ArrowUpRight,
-  Search
+  Search,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { 
   ChoroplethMetric, 
@@ -110,7 +112,8 @@ export const MapView: React.FC<MapViewProps> = ({
   const [arcgisSublayers, setArcgisSublayers] = useState<number[]>([0, 1, 2, 3]);
 
   // UI panels
-  const [showLayerPanel, setShowLayerPanel] = useState(true);
+  const [showLayerPanel, setShowLayerPanel] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 768 : false);
+  const [showLegend, setShowLegend] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
   const [hoveredInfo, setHoveredInfo] = useState<{ title: string; subtitle: string; stats?: string } | null>(null);
 
   // Search Bar state (moved from header)
@@ -490,10 +493,10 @@ export const MapView: React.FC<MapViewProps> = ({
       />
 
       {/* Top Left: Extent Presets */}
-      <div className="absolute top-4 left-14 z-10 flex items-center gap-1.5 bg-slate-900/90 backdrop-blur border border-black dark:border-slate-700/80 rounded-lg p-1 shadow-lg">
+      <div className="absolute top-3 sm:top-4 left-12 sm:left-14 z-10 flex items-center gap-1 sm:gap-1.5 bg-slate-900/90 backdrop-blur border border-black dark:border-slate-700/80 rounded-lg p-1 shadow-lg">
         <button
           onClick={handleZoomToContiguousUS}
-          className="px-2.5 py-1 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded transition"
+          className="px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded transition"
           title="Zoom to Lower 48 States"
         >
           CONUS
@@ -501,7 +504,7 @@ export const MapView: React.FC<MapViewProps> = ({
         <span className="w-px h-3 bg-black/40 dark:bg-slate-700"></span>
         <button
           onClick={handleZoomToAlaska}
-          className="px-2 py-1 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded transition"
+          className="px-1.5 sm:px-2 py-1 text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded transition"
           title="Zoom to Alaska"
         >
           Alaska
@@ -509,15 +512,15 @@ export const MapView: React.FC<MapViewProps> = ({
         <span className="w-px h-3 bg-black/40 dark:bg-slate-700"></span>
         <button
           onClick={handleZoomToHawaii}
-          className="px-2 py-1 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded transition"
+          className="px-1.5 sm:px-2 py-1 text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded transition"
           title="Zoom to Hawaii"
         >
           Hawaii
         </button>
       </div>
 
-      {/* Top Left: Floating Search Bar (Moved from Header as annotated) */}
-      <div ref={searchContainerRef} className="absolute top-[84px] left-4 z-20 w-64 sm:w-72">
+      {/* Top Left: Floating Search Bar */}
+      <div ref={searchContainerRef} className="absolute top-[68px] sm:top-[84px] left-3 sm:left-4 z-20 w-[calc(100%-88px)] sm:w-72 max-w-xs">
         <div className="relative flex items-center bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl shadow-xl">
           <Search className="w-3.5 h-3.5 absolute left-3 text-slate-400 pointer-events-none" />
           <input
@@ -570,25 +573,43 @@ export const MapView: React.FC<MapViewProps> = ({
       </div>
 
       {/* Top Right: Layer Manager & Basemap Controls */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2 max-w-xs w-full sm:w-auto">
-        <div className="bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl shadow-xl overflow-hidden text-xs w-72">
-          
-          {/* Header */}
-          <div 
-            onClick={() => setShowLayerPanel(!showLayerPanel)}
-            className="p-3 bg-slate-850 flex items-center justify-between cursor-pointer border-b border-slate-800 hover:bg-slate-800/60 transition"
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex flex-col items-end gap-2 max-w-[calc(100vw-24px)] sm:max-w-xs w-auto">
+        {!showLayerPanel && (
+          <button
+            onClick={() => setShowLayerPanel(true)}
+            className="p-2 sm:px-3 sm:py-2 bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl shadow-xl text-xs font-semibold text-slate-200 flex items-center gap-1.5 hover:bg-slate-800 transition"
+            title="Open Map Layers & Styling"
           >
-            <div className="flex items-center gap-2 font-semibold text-slate-100">
-              <Layers className="w-4 h-4 text-blue-400" />
-              <span>Map Layers & Styling</span>
-            </div>
-            <button className="text-slate-400 hover:text-slate-200">
-              <Sliders className="w-3.5 h-3.5" />
-            </button>
-          </div>
+            <Layers className="w-4 h-4 text-blue-400" />
+            <span className="text-[11px] sm:text-xs">Layers</span>
+            <Sliders className="w-3 h-3 text-slate-400" />
+          </button>
+        )}
 
-          {showLayerPanel && (
-            <div className="p-3 space-y-3.5 max-h-[75vh] overflow-y-auto">
+        {showLayerPanel && (
+          <div className="bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl shadow-xl overflow-hidden text-xs w-[calc(100vw-24px)] sm:w-72">
+            
+            {/* Header */}
+            <div 
+              onClick={() => setShowLayerPanel(false)}
+              className="p-3 bg-slate-850 flex items-center justify-between cursor-pointer border-b border-slate-800 hover:bg-slate-800/60 transition"
+            >
+              <div className="flex items-center gap-2 font-semibold text-slate-100">
+                <Layers className="w-4 h-4 text-blue-400" />
+                <span>Map Layers & Styling</span>
+              </div>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLayerPanel(false);
+                }}
+                className="text-slate-400 hover:text-slate-200 p-0.5 rounded"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-3 space-y-3.5 max-h-[70vh] sm:max-h-[75vh] overflow-y-auto">
               
               {/* Basemap Selection */}
               <div>
@@ -732,8 +753,8 @@ export const MapView: React.FC<MapViewProps> = ({
               </div>
 
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Hover Info Card */}
@@ -749,7 +770,7 @@ export const MapView: React.FC<MapViewProps> = ({
 
       {/* Selected Feature Drawer (Bottom Right Floating) */}
       {selectedFeature && (
-        <div className="absolute bottom-6 right-6 z-20 bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700 rounded-xl p-4 shadow-2xl max-w-sm w-full animate-in slide-in-from-bottom-2">
+        <div className="absolute bottom-3 sm:bottom-6 right-3 sm:right-6 left-3 sm:left-auto z-20 bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700 rounded-xl p-3.5 sm:p-4 shadow-2xl max-w-full sm:max-w-sm sm:w-80 w-auto animate-in slide-in-from-bottom-2">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400">
@@ -761,7 +782,7 @@ export const MapView: React.FC<MapViewProps> = ({
                 <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                   {selectedFeature.type} Selected
                 </span>
-                <h4 className="text-sm font-bold text-white">
+                <h4 className="text-sm font-bold text-white truncate max-w-[180px] sm:max-w-none">
                   {selectedFeature.properties.state_name || 
                    selectedFeature.properties.areaname || 
                    selectedFeature.properties.route || 
@@ -857,68 +878,81 @@ export const MapView: React.FC<MapViewProps> = ({
       )}
 
       {/* Dynamic Map Legend (Bottom Left) */}
-      <div className="absolute bottom-6 left-6 z-10 bg-slate-900/90 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl p-3 shadow-xl max-w-xs text-xs">
-        <div className="flex items-center gap-1.5 font-semibold text-slate-200 mb-2 border-b border-slate-800 pb-1.5">
-          <Compass className="w-3.5 h-3.5 text-blue-400" />
-          <span>Legend</span>
-        </div>
+      <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 z-10 bg-slate-900/90 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl p-2.5 sm:p-3 shadow-xl max-w-[calc(100vw-24px)] sm:max-w-xs text-xs">
+        <button
+          onClick={() => setShowLegend(!showLegend)}
+          className="w-full flex items-center justify-between font-semibold text-slate-200 text-left cursor-pointer"
+        >
+          <div className="flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-blue-400" />
+            <span>Legend</span>
+          </div>
+          <span className="text-[10px] text-slate-400 hover:text-white flex items-center gap-0.5">
+            {showLegend ? 'Hide' : 'Show'}
+            {showLegend ? <ChevronDown className="w-3 h-3" /> : <ChevronUp className="w-3 h-3" />}
+          </span>
+        </button>
 
-        {/* Choropleth Legend if States vector is active */}
-        {showStatesVector && choroplethMetric === 'pop2000' && (
-          <div className="space-y-1">
-            <span className="text-[10px] text-slate-400 font-medium">State Population (2000)</span>
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1 pt-1">
-              {POPULATION_LEGEND_GRADES.map((grade, idx) => (
-                <div key={idx} className="flex items-center gap-1.5 text-[10px]">
-                  <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: grade.color }}></span>
-                  <span className="text-slate-300 truncate">{grade.label}</span>
+        {showLegend && (
+          <div className="mt-2 pt-2 border-t border-slate-800/80 space-y-2 max-h-44 overflow-y-auto pr-1">
+            {/* Choropleth Legend if States vector is active */}
+            {showStatesVector && choroplethMetric === 'pop2000' && (
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-400 font-medium">State Population (2000)</span>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1 pt-1">
+                  {POPULATION_LEGEND_GRADES.map((grade, idx) => (
+                    <div key={idx} className="flex items-center gap-1.5 text-[10px]">
+                      <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: grade.color }}></span>
+                      <span className="text-slate-300 truncate">{grade.label}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            )}
+
+            {showStatesVector && choroplethMetric === 'pop00_sqmi' && (
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-400 font-medium">Density (People / mi²)</span>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1 pt-1">
+                  {DENSITY_LEGEND_GRADES.map((grade, idx) => (
+                    <div key={idx} className="flex items-center gap-1.5 text-[10px]">
+                      <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: grade.color }}></span>
+                      <span className="text-slate-300 truncate">{grade.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Symbols summary */}
+            <div className="pt-1.5 border-t border-slate-800/80 space-y-1.5 text-[10px]">
+              {showCitiesVector && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 border border-amber-800"></span>
+                    <span className="text-slate-300">State Capital</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span className="text-slate-300">&gt; 1M Metro</span>
+                  </div>
+                </div>
+              )}
+              {showHighwaysVector && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-3 h-1 rounded-sm bg-red-500"></span>
+                    <span className="text-slate-300">Interstate (Red)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-3 h-1 rounded-sm bg-red-400"></span>
+                    <span className="text-slate-300">US Route</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
-
-        {showStatesVector && choroplethMetric === 'pop00_sqmi' && (
-          <div className="space-y-1">
-            <span className="text-[10px] text-slate-400 font-medium">Density (People / mi²)</span>
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1 pt-1">
-              {DENSITY_LEGEND_GRADES.map((grade, idx) => (
-                <div key={idx} className="flex items-center gap-1.5 text-[10px]">
-                  <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: grade.color }}></span>
-                  <span className="text-slate-300 truncate">{grade.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Symbols summary */}
-        <div className="mt-2 pt-2 border-t border-slate-800/80 space-y-1.5 text-[10px]">
-          {showCitiesVector && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 border border-amber-800"></span>
-                <span className="text-slate-300">State Capital</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span className="text-slate-300">&gt; 1M Metro</span>
-              </div>
-            </div>
-          )}
-          {showHighwaysVector && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-1 rounded-sm bg-red-500"></span>
-                <span className="text-slate-300">Interstate (Red)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-1 rounded-sm bg-red-400"></span>
-                <span className="text-slate-300">US Route</span>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
 
     </div>

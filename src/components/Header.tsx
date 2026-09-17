@@ -31,40 +31,41 @@ export const Header: React.FC<HeaderProps> = ({
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   return (
-    <header className="bg-slate-900/95 border-b border-black dark:border-slate-800 backdrop-blur sticky top-0 z-30 px-4 lg:px-6 py-2.5">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+    <header className="bg-slate-900/95 border-b border-black dark:border-slate-800 backdrop-blur sticky top-0 z-30 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3">
         
         {/* Left: Brand & Service Status */}
-        <div className="flex items-center justify-between w-full md:w-auto gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-              <Layers className="w-5 h-5" />
+        <div className="flex items-center justify-between w-full md:w-auto gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold text-slate-100 tracking-tight leading-none">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <h1 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight leading-tight">
                   USA Map-Server Spatial Dashboard
                 </h1>
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Live REST
+                  <span className="hidden xs:inline">Live</span> REST
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1.5">
+              <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 flex items-center gap-1.5 truncate">
                 <span>WKID 4326</span>
                 <span>•</span>
-                <span>4 Spatial Layers</span>
-                <span>•</span>
-                <span className="text-slate-500">sampleserver6.arcgisonline.com</span>
+                <span>4 Layers</span>
+                <span className="hidden sm:inline">•</span>
+                <span className="text-slate-500 hidden sm:inline truncate">sampleserver6.arcgisonline.com</span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 md:hidden">
+          {/* Mobile Right Controls */}
+          <div className="flex items-center gap-1.5 md:hidden shrink-0">
             <ThemeToggle />
             <button
               onClick={() => setShowInfoModal(true)}
-              className="p-1.5 text-slate-400 hover:text-slate-200 rounded-md hover:bg-slate-800 transition"
+              className="p-1.5 text-slate-400 hover:text-slate-200 rounded-md hover:bg-slate-800 transition min-w-[36px] min-h-[36px] flex items-center justify-center"
               title="Dataset Info"
             >
               <Info className="w-4 h-4" />
@@ -72,11 +73,11 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Center: Tabs Navigation */}
-        <nav className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-lg border border-black dark:border-slate-800/80 overflow-x-auto max-w-full">
+        {/* Center: Tabs Navigation (horizontally scrollable with smooth touch) */}
+        <nav className="flex items-center gap-1 bg-slate-950/90 p-1 rounded-lg border border-black dark:border-slate-800/80 overflow-x-auto max-w-full w-full md:w-auto scrollbar-none overscroll-x-contain touch-pan-x">
           <button
             onClick={() => onTabChange('map')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-0 ${
               activeTab === 'map'
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -88,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onTabChange('states')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-0 ${
               activeTab === 'states'
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -100,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onTabChange('cities')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-0 ${
               activeTab === 'cities'
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -112,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onTabChange('highways')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-0 ${
               activeTab === 'highways'
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -124,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onTabChange('counties')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-0 ${
               activeTab === 'counties'
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -136,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onTabChange('api')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-md text-xs font-medium transition whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-0 ${
               activeTab === 'api'
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -147,8 +148,8 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Right: Theme Toggle & Info Modal */}
-        <div className="flex items-center gap-2">
+        {/* Right: Theme Toggle & Info Modal (Desktop) */}
+        <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
 
           <button
@@ -163,8 +164,8 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Dataset Info Modal */}
       {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-700 rounded-xl max-w-lg w-full p-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-slate-900 border border-slate-700 rounded-xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowInfoModal(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-800 transition"

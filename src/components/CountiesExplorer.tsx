@@ -218,12 +218,12 @@ export const CountiesExplorer: React.FC<CountiesExplorerProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
             {/* State selector */}
             <select
               value={selectedStateName}
               onChange={(e) => setSelectedStateName(e.target.value)}
-              className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-purple-500 font-medium"
+              className="w-full sm:w-auto bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-purple-500 font-medium"
             >
               {statesList.map((s) => (
                 <option key={s.abbr} value={s.name}>

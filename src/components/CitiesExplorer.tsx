@@ -188,9 +188,9 @@ export const CitiesExplorer: React.FC<CitiesExplorerProps> = ({
         {/* Table Filter Controls */}
         <div className="p-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
           
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
             {/* Search */}
-            <div className="relative w-48 sm:w-60">
+            <div className="relative w-full sm:w-60">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
@@ -211,7 +211,7 @@ export const CitiesExplorer: React.FC<CitiesExplorerProps> = ({
                 setSelectedState(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
+              className="w-full sm:w-auto bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
             >
               <option value="all">All States</option>
               {statesList.map((s) => (
@@ -228,7 +228,7 @@ export const CitiesExplorer: React.FC<CitiesExplorerProps> = ({
                 setMinPop(parseInt(e.target.value, 10));
                 setCurrentPage(1);
               }}
-              className="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
+              className="w-full sm:w-auto bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
             >
               <option value={0}>All Populations</option>
               <option value={50000}>&ge; 50,000</option>
@@ -244,7 +244,7 @@ export const CitiesExplorer: React.FC<CitiesExplorerProps> = ({
                 setCapitalOnly(!capitalOnly);
                 setCurrentPage(1);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
+              className={`w-full sm:w-auto justify-center flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
                 capitalOnly
                   ? 'bg-amber-500/10 border-amber-500/40 text-amber-300'
                   : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
@@ -256,7 +256,7 @@ export const CitiesExplorer: React.FC<CitiesExplorerProps> = ({
           </div>
 
           {/* Records count & pagination info */}
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          <div className="flex items-center justify-between sm:justify-end w-full lg:w-auto gap-2 text-xs text-slate-400">
             <span>Showing {((currentPage - 1) * pageSize) + 1}–{Math.min(currentPage * pageSize, filteredCities.length)} of {filteredCities.length}</span>
             <div className="flex items-center gap-1 ml-2">
               <button

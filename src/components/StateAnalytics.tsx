@@ -363,12 +363,12 @@ export const StateAnalytics: React.FC<StateAnalyticsProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
             {/* Sub-region filter */}
             <select
               value={selectedSubRegion}
               onChange={(e) => setSelectedSubRegion(e.target.value)}
-              className="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
+              className="w-full sm:w-auto bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
             >
               <option value="all">All Sub-Regions</option>
               {subRegions.map((sr) => (
