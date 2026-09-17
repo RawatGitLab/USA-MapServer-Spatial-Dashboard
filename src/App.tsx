@@ -306,27 +306,27 @@ export default function App() {
         )}
       </main>
 
-      // {/* Footer */}
-      // <footer className="bg-slate-950 border-t border-slate-900 px-4 lg:px-6 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-      //   <div className="flex items-center gap-3">
-      //     <span className="font-semibold text-slate-400">ESRI Sample Server 6</span>
-      //     <span>•</span>
-      //     <span>USA MapServer</span>
-      //     <span>•</span>
-      //     <span>Census 2000 Demographics</span>
-      //   </div>
-      //   <div className="flex items-center gap-4 text-[11px]">
-      //     <a
-      //       href="https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer"
-      //       target="_blank"
-      //       rel="noreferrer"
-      //       className="hover:text-slate-300 flex items-center gap-1 transition"
-      //     >
-      //       <span>Service REST Endpoint</span>
-      //       <ExternalLink className="w-3 h-3" />
-      //     </a>
-      //   </div>
-      // </footer>
+      {/* Footer */}
+      <footer className="bg-slate-950 border-t border-slate-900 px-4 lg:px-6 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="flex items-center gap-3">
+          <span className="font-semibold text-slate-400">ESRI Sample Server 6</span>
+          <span>•</span>
+          <span>USA MapServer</span>
+          <span>•</span>
+          <span>Census 2000 Demographics</span>
+        </div>
+        <div className="flex items-center gap-4 text-[11px]">
+          <a
+            href="https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-slate-300 flex items-center gap-1 transition"
+          >
+            <span>Service REST Endpoint</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+      </footer>
 
     </div>
   );
