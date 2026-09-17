@@ -1,0 +1,6 @@
+{
+  "name": "USA Map-Server Spatial Dashboard",
+  "description": "Interactive geospatial dashboard and analytical visualizer for the ArcGIS USA MapServer dataset, including states, counties, highways, and cities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

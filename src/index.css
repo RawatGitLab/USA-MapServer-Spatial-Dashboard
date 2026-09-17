@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Smooth theme transitions on root containers */
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Light Mode Overrides for Slate Color Tokens */
+html.light,
+:root:not(.dark) {
+  color-scheme: light;
+  --color-slate-50: #0f172a;
+  --color-slate-100: #0f172a;
+  --color-slate-200: #1e293b;
+  --color-slate-300: #334155;
+  --color-slate-400: #64748b;
+  --color-slate-500: #64748b;
+  --color-slate-600: #94a3b8;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-850: #f1f5f9;
+  --color-slate-900: #ffffff;
+  --color-slate-950: #f8fafc;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Body defaults */
+html.light body,
+:root:not(.dark) body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Ensure standalone white text adapts to deep slate in light mode */
+html.light .text-white:not([class*="bg-blue"]):not([class*="bg-indigo"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-gradient"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-sky"]):not([class*="bg-teal"]):not([class*="fill-"]):not([class*="hover:bg-blue"]),
+:root:not(.dark) .text-white:not([class*="bg-blue"]):not([class*="bg-indigo"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-gradient"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-sky"]):not([class*="bg-teal"]):not([class*="fill-"]):not([class*="hover:bg-blue"]) {
+  color: #0f172a;
+}
+
+/* Light mode card shadow depth */
+html.light .shadow-xl,
+html.light .shadow-lg,
+html.light .shadow-2xl {
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+/* Leaflet Zoom & Attribution in Light Mode */
+html.light .leaflet-control-zoom a {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .leaflet-control-zoom a:hover {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .leaflet-container {
+  background-color: #f8fafc !important;
+}
