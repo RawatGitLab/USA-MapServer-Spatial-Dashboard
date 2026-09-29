@@ -31,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   return (
-    <header className="bg-slate-900/95 border-b border-black dark:border-slate-800 backdrop-blur sticky top-0 z-30 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5">
+    <header className="bg-slate-900/95 border-b border-black dark:border-slate-800 backdrop-blur sticky top-0 z-30 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 shrink-0">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3">
         
         {/* Left: Brand & Service Status */}

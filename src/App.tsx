@@ -4,8 +4,7 @@ import {
   AlertCircle, 
   MapPin, 
   Layers, 
-  RefreshCw,
-  ExternalLink 
+  RefreshCw 
 } from 'lucide-react';
 import { 
   ActiveTab, 
@@ -185,7 +184,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className={`bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white ${
+      activeTab === 'map' ? 'h-screen max-h-screen overflow-hidden' : 'min-h-screen'
+    }`}>
       
       {/* Top Application Header */}
       <Header
@@ -210,7 +211,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col relative">
+      <main className={`flex-1 flex flex-col relative ${activeTab === 'map' ? 'min-h-0 overflow-hidden' : ''}`}>
         {loading ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center min-h-[450px]">
             <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 mb-4 animate-pulse">
@@ -240,9 +241,9 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col">
+          <div className={`flex-1 flex flex-col ${activeTab === 'map' ? 'min-h-0 overflow-hidden' : ''}`}>
             {activeTab === 'map' && (
-              <div className="flex-1 w-full h-[calc(100vh-120px)] sm:h-[calc(100vh-140px)] min-h-[460px] sm:min-h-[550px]">
+              <div className="flex-1 w-full h-full min-h-0 relative">
                 <MapView
                   statesGeoJson={statesGeoJson}
                   citiesGeoJson={citiesGeoJson}
@@ -305,29 +306,6 @@ export default function App() {
           </div>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="bg-slate-950 border-t border-slate-900 px-4 lg:px-6 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <div className="flex items-center gap-3">
-          <span className="font-semibold text-slate-400">ESRI Sample Server 6</span>
-          <span>•</span>
-          <span>USA MapServer</span>
-          <span>•</span>
-          <span>Census 2000 Demographics</span>
-        </div>
-        <div className="flex items-center gap-4 text-[11px]">
-          <a
-            href="https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-slate-300 flex items-center gap-1 transition"
-          >
-            <span>Service REST Endpoint</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
-      </footer>
-
     </div>
   );
 }

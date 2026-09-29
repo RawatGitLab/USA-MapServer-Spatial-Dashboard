@@ -71,7 +71,7 @@ const BASEMAP_URLS: Record<BasemapType, { url: string; attribution: string }> = 
   },
   satellite: {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attribution: 'Tiles &copy; Esri'
+    attribution: 'Tiles &copy; Esri | USA MapServer'
   }
 };
 
@@ -178,7 +178,19 @@ export const MapView: React.FC<MapViewProps> = ({
 
     mapRef.current = map;
 
+    // Observe container resizing to keep tiles crisp and fill 100% height
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && mapContainerRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        map.invalidateSize();
+      });
+      resizeObserver.observe(mapContainerRef.current);
+    }
+
     return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       map.remove();
       mapRef.current = null;
     };
@@ -483,13 +495,13 @@ export const MapView: React.FC<MapViewProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full min-h-[520px] bg-slate-950 overflow-hidden flex flex-col">
+    <div className="relative w-full h-full min-h-0 bg-slate-950 overflow-hidden flex flex-col">
       
       {/* Map Element */}
       <div 
         ref={mapContainerRef} 
         id="arcgis-leaflet-map" 
-        className="w-full flex-1 z-0 cursor-grab active:cursor-grabbing border-y border-black dark:border-slate-800"
+        className="w-full h-full flex-1 min-h-0 z-0 cursor-grab active:cursor-grabbing border-t border-black dark:border-slate-800"
       />
 
       {/* Top Left: Extent Presets */}
