@@ -121,14 +121,21 @@ export const MapView: React.FC<MapViewProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Zoom to layer dropdown state
+  const [showZoomMenu, setShowZoomMenu] = useState(false);
+  const zoomMenuContainerRef = useRef<HTMLDivElement>(null);
+
   const query = externalSearchQuery !== undefined ? externalSearchQuery : internalSearchQuery;
   const updateQuery = externalSetSearchQuery || setInternalSearchQuery;
 
-  // Handle click outside search dropdown
+  // Handle click outside search dropdown and zoom menu
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
         setIsSearchOpen(false);
+      }
+      if (zoomMenuContainerRef.current && !zoomMenuContainerRef.current.contains(e.target as Node)) {
+        setShowZoomMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -494,6 +501,24 @@ export const MapView: React.FC<MapViewProps> = ({
     mapRef.current.flyTo([20.7984, -156.3319], 7, { duration: 1 });
   };
 
+  // Zoom to specific GIS layer extent
+  const handleZoomToLayer = (layerKey: 'states' | 'cities' | 'highways' | 'all') => {
+    if (!mapRef.current) return;
+
+    if (layerKey === 'states') {
+      if (!showStatesVector) setShowStatesVector(true);
+      mapRef.current.flyTo([38.5, -96.5], 4, { duration: 1.2 });
+    } else if (layerKey === 'cities') {
+      if (!showCitiesVector) setShowCitiesVector(true);
+      mapRef.current.flyTo([39.0, -96.0], 5, { duration: 1.2 });
+    } else if (layerKey === 'highways') {
+      if (!showHighwaysVector) setShowHighwaysVector(true);
+      mapRef.current.flyTo([38.5, -97.0], 4.5, { duration: 1.2 });
+    } else {
+      mapRef.current.flyTo([38.5, -96.5], 4, { duration: 1 });
+    }
+  };
+
   return (
     <div className="relative w-full h-full min-h-0 bg-slate-950 overflow-hidden flex flex-col">
       
@@ -584,6 +609,115 @@ export const MapView: React.FC<MapViewProps> = ({
         )}
       </div>
 
+      {/* Top Left: Zoom to Layer Toolbar (As annotated below search) */}
+      <div 
+        ref={zoomMenuContainerRef}
+        className="absolute top-[114px] sm:top-[128px] left-3 sm:left-4 z-20 flex items-center gap-1.5 bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl p-1 shadow-xl"
+      >
+        {/* Main Zoom to Layer button with dropdown toggle */}
+        <div className="relative">
+          <button
+            onClick={() => setShowZoomMenu(!showZoomMenu)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-900 bg-white hover:bg-slate-100 border border-slate-200/80 shadow-sm transition"
+            title="Zoom to specific GIS Layer"
+          >
+            <Maximize2 className="w-3.5 h-3.5 text-blue-600" />
+            <span className="text-black font-semibold">Zoom to Layer</span>
+            <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform ${showZoomMenu ? 'rotate-180' : ''}`} />
+          </button>
+
+          {/* Dropdown menu */}
+          {showZoomMenu && (
+            <div className="absolute left-0 top-full mt-1.5 w-48 bg-slate-900/95 backdrop-blur-md border border-black dark:border-slate-700/80 rounded-xl shadow-2xl p-1 z-30 divide-y divide-slate-800/60">
+              <div className="p-1 space-y-0.5">
+                <button
+                  onClick={() => {
+                    handleZoomToLayer('states');
+                    setShowZoomMenu(false);
+                  }}
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-white flex items-center justify-between transition"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-sm bg-orange-500"></span>
+                    <span>States (Layer 2)</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-mono">51</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    handleZoomToLayer('cities');
+                    setShowZoomMenu(false);
+                  }}
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-white flex items-center justify-between transition"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    <span>Cities (Layer 0)</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-mono">3.5k</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    handleZoomToLayer('highways');
+                    setShowZoomMenu(false);
+                  }}
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-white flex items-center justify-between transition"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-1 rounded-sm bg-red-500"></span>
+                    <span>Highways (Layer 1)</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-mono">679</span>
+                </button>
+              </div>
+
+              <div className="p-1">
+                <button
+                  onClick={() => {
+                    handleZoomToLayer('all');
+                    setShowZoomMenu(false);
+                  }}
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-blue-400 hover:bg-blue-600/10 flex items-center gap-2 transition"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>All Layers Combined</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Pills for instant 1-click zoom */}
+        <div className="hidden xs:flex items-center gap-1 pl-0.5">
+          <button
+            onClick={() => handleZoomToLayer('states')}
+            className="px-2 py-1 text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition flex items-center gap-1.5"
+            title="Zoom directly to States"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+            <span>States</span>
+          </button>
+          <button
+            onClick={() => handleZoomToLayer('cities')}
+            className="px-2 py-1 text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition flex items-center gap-1.5"
+            title="Zoom directly to Cities"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            <span>Cities</span>
+          </button>
+          <button
+            onClick={() => handleZoomToLayer('highways')}
+            className="px-2 py-1 text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition flex items-center gap-1.5"
+            title="Zoom directly to Highways"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+            <span>Highways</span>
+          </button>
+        </div>
+      </div>
+
       {/* Top Right: Layer Manager & Basemap Controls */}
       <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex flex-col items-end gap-2 max-w-[calc(100vw-24px)] sm:max-w-xs w-auto">
         {!showLayerPanel && (
@@ -659,14 +793,24 @@ export const MapView: React.FC<MapViewProps> = ({
                     <span className="w-2.5 h-2.5 rounded-sm bg-orange-500"></span>
                     <span className="text-slate-200 font-medium">Layer 2: States</span>
                   </div>
-                  <button
-                    onClick={() => setShowStatesVector(!showStatesVector)}
-                    className={`p-1 rounded transition ${
-                      showStatesVector ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500'
-                    }`}
-                  >
-                    {showStatesVector ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleZoomToLayer('states')}
+                      className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700/80 transition"
+                      title="Zoom to States Layer"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setShowStatesVector(!showStatesVector)}
+                      className={`p-1 rounded transition ${
+                        showStatesVector ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500'
+                      }`}
+                      title={showStatesVector ? 'Hide Layer' : 'Show Layer'}
+                    >
+                      {showStatesVector ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Choropleth Mode Selector */}
@@ -694,14 +838,24 @@ export const MapView: React.FC<MapViewProps> = ({
                       <span className="text-[10px] text-slate-500 ml-1.5">3.5k</span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setShowCitiesVector(!showCitiesVector)}
-                    className={`p-1 rounded transition ${
-                      showCitiesVector ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500'
-                    }`}
-                  >
-                    {showCitiesVector ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleZoomToLayer('cities')}
+                      className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700/80 transition"
+                      title="Zoom to Cities Layer"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setShowCitiesVector(!showCitiesVector)}
+                      className={`p-1 rounded transition ${
+                        showCitiesVector ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500'
+                      }`}
+                      title={showCitiesVector ? 'Hide Layer' : 'Show Layer'}
+                    >
+                      {showCitiesVector ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Highways Layer */}
@@ -713,14 +867,24 @@ export const MapView: React.FC<MapViewProps> = ({
                       <span className="text-[10px] text-slate-500 ml-1.5">679</span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setShowHighwaysVector(!showHighwaysVector)}
-                    className={`p-1 rounded transition ${
-                      showHighwaysVector ? 'text-red-400 bg-red-500/10' : 'text-slate-500'
-                    }`}
-                  >
-                    {showHighwaysVector ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleZoomToLayer('highways')}
+                      className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700/80 transition"
+                      title="Zoom to Highways Layer"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setShowHighwaysVector(!showHighwaysVector)}
+                      className={`p-1 rounded transition ${
+                        showHighwaysVector ? 'text-red-400 bg-red-500/10' : 'text-slate-500'
+                      }`}
+                      title={showHighwaysVector ? 'Hide Layer' : 'Show Layer'}
+                    >
+                      {showHighwaysVector ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
                 </div>
               </div>
 
