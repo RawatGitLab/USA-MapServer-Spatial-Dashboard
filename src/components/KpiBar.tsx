@@ -26,7 +26,7 @@ export const KpiBar: React.FC<KpiBarProps> = ({
   const topPopState = sortedByPop[0];
 
   return (
-    <section className="bg-slate-950/60 border-b border-black dark:border-slate-800/80 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 shrink-0">
+    <section className="bg-[#e6f4f9] dark:bg-cyan-950/20 border-b border-[#c8e6f3] dark:border-slate-800/80 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 shrink-0">
       {/* Mobile Toggle Bar */}
       <div className="flex sm:hidden items-center justify-between py-0.5">
         <button

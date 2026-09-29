@@ -31,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   return (
-    <header className="bg-slate-900/95 border-b border-black dark:border-slate-800 backdrop-blur sticky top-0 z-30 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 shrink-0">
+    <header className="bg-[#c9ad94] dark:bg-slate-900/95 border-b border-[#b3957a] dark:border-slate-800 backdrop-blur sticky top-0 z-30 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 shrink-0">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3">
         
         {/* Left: Brand & Service Status */}
@@ -45,8 +45,8 @@ export const Header: React.FC<HeaderProps> = ({
                 <h1 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight leading-tight">
                   USA Map-Server Spatial Dashboard
                 </h1>
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/30 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
                   <span className="hidden xs:inline">Live</span> REST
                 </span>
               </div>
